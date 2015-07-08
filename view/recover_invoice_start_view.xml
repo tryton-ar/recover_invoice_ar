@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Recover Invoice">
+    <label name="pos"/>
+    <field name="pos"/>
+    <label name="invoice_type"/>
+    <field name="invoice_type"/>
+    <label name="cbte_nro"/>
+    <field name="cbte_nro"/>
+</form>
