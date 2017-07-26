@@ -1,6 +1,7 @@
-#! -*- coding: utf8 -*-
-#This file is part of Tryton.  The COPYRIGHT file at the top level of
-#this repository contains the full copyright notices and license terms.
+# -*- coding: utf-8 -*-
+# This file is part of the recover_invoice_ar module for Tryton.
+# The COPYRIGHT file at the top level of this repository contains
+# the full copyright notices and license terms.
 
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.model import fields, ModelView
