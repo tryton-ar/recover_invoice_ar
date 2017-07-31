@@ -92,9 +92,10 @@ class RecoverInvoice(Wizard):
             from pyafipws.wsfev1 import WSFEv1  # local market
             ws = WSFEv1()
             if company.pyafipws_mode_cert == 'homologacion':
-                WSDL = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+                WSDL = 'https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL'
             elif company.pyafipws_mode_cert == 'produccion':
-                WSDL = "https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL"
+                WSDL = (
+                    'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL')
         elif service == 'wsfex':
             message = u'WS no soportado: ' + repr(service)
             self.factura.message = message
@@ -127,16 +128,16 @@ class RecoverInvoice(Wizard):
 
         ws.CompConsultar(tipo_cbte, punto_vta, cbte_nro)
 
-        message = "FechaCbte = " + ws.FechaCbte + "\n"
-        message += "CbteNro = " + str(ws.CbteNro) + "\n"
-        message += "PuntoVenta = " + str(ws.PuntoVenta) + "\n"
-        message += "ImpTotal =" + str(ws.ImpTotal) + "\n"
-        message += "CAE = " + str(ws.CAE) + "\n"
-        message += "Vencimiento = " + str(ws.Vencimiento) + "\n"
-        message += "EmisionTipo = " + str(ws.EmisionTipo) + "\n"
-        message += "CUIT EMISOR = " + str(ws.Cuit) + "\n"
-        if ws.AnalizarXml("XmlResponse"):
-            message += "CUIT CLIENTE = " + ws.ObtenerTagXml("DocNro") + "\n"
+        message = 'FechaCbte = ' + ws.FechaCbte + '\n'
+        message += 'CbteNro = ' + str(ws.CbteNro) + '\n'
+        message += 'PuntoVenta = ' + str(ws.PuntoVenta) + '\n'
+        message += 'ImpTotal =' + str(ws.ImpTotal) + '\n'
+        message += 'CAE = ' + str(ws.CAE) + '\n'
+        message += 'Vencimiento = ' + str(ws.Vencimiento) + '\n'
+        message += 'EmisionTipo = ' + str(ws.EmisionTipo) + '\n'
+        message += 'CUIT EMISOR = ' + str(ws.Cuit) + '\n'
+        if ws.AnalizarXml('XmlResponse'):
+            message += 'CUIT CLIENTE = ' + ws.ObtenerTagXml('DocNro') + '\n'
 
         self.factura.FechaCbte = str(ws.FechaCbte)
         self.factura.CbteNro = str(ws.CbteNro)
@@ -186,8 +187,8 @@ class RecoverInvoice(Wizard):
         punto_vta = self.start.pos.number
         cae_due = ''.join([c for c in str(self.factura.Vencimiento or '')
                 if c.isdigit()])
-        bars = ''.join([str(self.factura.Cuit), "%02d" % int(tipo_cbte),
-                "%04d" % int(punto_vta), str(self.factura.CAE), cae_due])
+        bars = ''.join([str(self.factura.Cuit), '%02d' % int(tipo_cbte),
+                '%04d' % int(punto_vta), str(self.factura.CAE), cae_due])
         bars = bars + invoice.pyafipws_verification_digit_modulo10(bars)
         invoice.pyafipws_barcode = bars
 
