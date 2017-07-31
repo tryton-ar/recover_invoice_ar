@@ -3,7 +3,6 @@
 The COPYRIGHT file at the top level of this repository contains
 the full copyright notices and license terms. -->
 <form string="Message">
-<form>
     <notebook colspan="4">
         <page string="Factura Obtenida" id='factura_obtenida'>
             <field name="message"/>
