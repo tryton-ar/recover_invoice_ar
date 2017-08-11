@@ -97,9 +97,13 @@ class RecoverInvoice(Wizard):
                 WSDL = (
                     'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL')
         elif service == 'wsfex':
-            message = u'WS no soportado: ' + repr(service)
-            self.factura.message = message
-            return 'factura'
+            from pyafipws.wsfexv1 import WSFEXv1 # foreign trade
+            ws = WSFEXv1()
+            if company.pyafipws_mode_cert == 'homologacion':
+                WSDL = 'https://wswhomo.afip.gov.ar/wsfexv1/service.asmx?WSDL'
+            elif company.pyafipws_mode_cert == 'produccion':
+                WSDL = (
+                    'https://servicios1.afip.gov.ar/wsfexv1/service.asmx?WSDL')
         else:
             message = u'WS no soportado: ' + repr(service)
             self.factura.message = message
@@ -122,11 +126,17 @@ class RecoverInvoice(Wizard):
         ws.Sign = auth_data['sign']
 
         if self.start.cbte_nro is None:
-            cbte_nro = ws.CompUltimoAutorizado(tipo_cbte, punto_vta)
+            if service == 'wsfe' or service == 'wsmtxca':
+                cbte_nro = ws.CompUltimoAutorizado(tipo_cbte, punto_vta)
+            elif service == 'wsfex':
+                cbte_nro = ws.GetLastCMP(tipo_cbte, punto_vta)
         else:
             cbte_nro = self.start.cbte_nro
 
-        ws.CompConsultar(tipo_cbte, punto_vta, cbte_nro)
+        if service == 'wsfe' or service == 'wsmtxca':
+            ws.CompConsultar(tipo_cbte, punto_vta, cbte_nro)
+        elif service == 'wsfex':
+            ws.GetCMP(tipo_cbte, punto_vta, cbte_nro)
 
         message = 'FechaCbte = ' + ws.FechaCbte + '\n'
         message += 'CbteNro = ' + str(ws.CbteNro) + '\n'
