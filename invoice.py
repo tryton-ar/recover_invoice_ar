@@ -8,6 +8,7 @@ from trytond.model import fields, ModelView
 from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.modules.account_invoice_ar.afip_auth import get_cache_dir
 
 __all__ = ['RecoverInvoice', 'RecoverInvoiceStart', 'RecoverInvoiceFactura']
 
@@ -119,7 +120,8 @@ class RecoverInvoice(Wizard):
 
         # connect to the webservice and call to the test method
         ws.LanzarExcepciones = True
-        ws.Conectar(wsdl=WSDL)
+        cache_dir = get_cache_dir()
+        ws.Conectar(wsdl=WSDL, cache=cache_dir)
         # set AFIP webservice credentials:
         ws.Cuit = company.party.vat_number
         ws.Token = auth_data['token']
