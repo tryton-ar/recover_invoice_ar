@@ -146,15 +146,25 @@ class RecoverInvoice(Wizard):
         message += 'ImpTotal =' + str(ws.ImpTotal) + '\n'
         message += 'CAE = ' + str(ws.CAE) + '\n'
         message += 'Vencimiento = ' + str(ws.Vencimiento) + '\n'
-        message += 'EmisionTipo = ' + str(ws.EmisionTipo) + '\n'
         message += 'CUIT EMISOR = ' + str(ws.Cuit) + '\n'
         if ws.AnalizarXml('XmlResponse'):
-            message += 'CUIT CLIENTE = ' + ws.ObtenerTagXml('DocNro') + '\n'
+            if service == 'wsfex':
+                cuit_cliente = ws.ObtenerTagXml('Cuit_pais_cliente')
+                emision_tipo = ws.ObtenerTagXml('Cbte_tipo')
+            else:
+                cuit_cliente = ws.ObtenerTagXml('DocNro')
+                emision_tipo = ws.ObtenerTagXml('CbteTipo')
+        message += 'CUIT CLIENTE = %s\n' % cuit_cliente
+        message += 'Tipo comprobante = %s\n' % emision_tipo
 
         self.factura.FechaCbte = str(ws.FechaCbte)
         self.factura.CbteNro = str(ws.CbteNro)
         self.factura.CAE = str(ws.CAE)
-        self.factura.Vencimiento = str(ws.Vencimiento)
+        if service == 'wsfex':
+            vto = str(ws.Vencimiento).split('/')
+            self.factura.Vencimiento = '-'.join([vto[2], vto[1], vto[0]])
+        else:
+            self.factura.Vencimiento = str(ws.Vencimiento)
         self.factura.Cuit = str(ws.Cuit)
 
         self.factura.message = message
