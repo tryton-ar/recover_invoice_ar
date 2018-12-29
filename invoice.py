@@ -48,13 +48,13 @@ class RecoverInvoice(Wizard):
         'recover.invoice.start',
         'recover_invoice_ar.recover_invoice_start_view', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Ask AFIP', 'ask_afip', 'tryton-go-next', default=True),
+            Button('Ask AFIP', 'ask_afip', 'tryton-forward', default=True),
         ])
     factura = StateView(
         'recover.invoice.factura',
         'recover_invoice_ar.recover_invoice_factura_view', [
-            Button('Close', 'end', 'tryton-close'),
-            Button('Previous', 'start', 'tryton-go-previous', default=True),
+            Button('Close', 'end', 'tryton-cancel'),
+            Button('Previous', 'start', 'tryton-back', default=True),
             Button('Save Invoice', 'save_invoice', 'tryton-save'),
         ])
     ask_afip = StateTransition()
