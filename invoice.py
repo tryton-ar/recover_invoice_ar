@@ -8,7 +8,6 @@ from trytond.model import fields, ModelView
 from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.modules.account_invoice_ar.afip_auth import get_cache_dir
 
 __all__ = ['RecoverInvoice', 'RecoverInvoiceStart', 'RecoverInvoiceFactura']
 
@@ -79,15 +78,14 @@ class RecoverInvoice(Wizard):
 
         # get the electronic invoice type, point of sale and service:
         pool = Pool()
-
         Company = pool.get('company.company')
-        company_id = Transaction().context.get('company')
-        if not company_id:
+        if Transaction().context.get('company'):
+            company = Company(Transaction().context['company'])
+        else:
             message = u'No hay companía:'
             self.factura.message = message
             return 'factura'
 
-        company = Company(company_id)
         # import the AFIP webservice helper for electronic invoice
         if service == 'wsfe':
             from pyafipws.wsfev1 import WSFEv1  # local market
@@ -98,7 +96,7 @@ class RecoverInvoice(Wizard):
                 WSDL = (
                     'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL')
         elif service == 'wsfex':
-            from pyafipws.wsfexv1 import WSFEXv1 # foreign trade
+            from pyafipws.wsfexv1 import WSFEXv1  # foreign trade
             ws = WSFEXv1()
             if company.pyafipws_mode_cert == 'homologacion':
                 WSDL = 'https://wswhomo.afip.gov.ar/wsfexv1/service.asmx?WSDL'
@@ -110,22 +108,28 @@ class RecoverInvoice(Wizard):
             self.factura.message = message
             return 'factura'
 
+        from trytond.modules.account_invoice_ar.afip_auth import \
+            get_cache_dir as get_account_invoice_ar_cache_dir
+
+        ws.LanzarExcepciones = True
+        cache = get_account_invoice_ar_cache_dir()
+
         # authenticate against AFIP:
         try:
-            auth_data = company.pyafipws_authenticate(service=service)
+            auth_data = company.pyafipws_authenticate(
+                service=service, cache=cache)
         except Exception, e:
             message = u'Service no soportado:' + repr(e)
             self.factura.message = message
             return 'factura'
 
-        # connect to the webservice and call to the test method
-        ws.LanzarExcepciones = True
-        cache_dir = get_cache_dir()
-        ws.Conectar(wsdl=WSDL, cache=cache_dir)
         # set AFIP webservice credentials:
         ws.Cuit = company.party.vat_number
         ws.Token = auth_data['token']
         ws.Sign = auth_data['sign']
+
+        # connect to the webservice and call to the test method
+        ws.Conectar(wsdl=WSDL, cache=cache)
 
         if self.start.cbte_nro is None:
             if service == 'wsfe' or service == 'wsmtxca':
