@@ -19,7 +19,7 @@ class RecoverInvoiceStart(ModelView):
     pos = fields.Many2One('account.pos', 'Point of Sale', required=True)
     invoice_type = fields.Many2One('account.pos.sequence', 'Invoice Type',
         domain=[('pos', '=', Eval('pos'))], depends=['pos'], required=True)
-    cbte_nro = fields.Integer(u'Número comprobante')
+    cbte_nro = fields.Integer('Número comprobante')
 
 
 class RecoverInvoiceFactura(ModelView):
@@ -82,7 +82,7 @@ class RecoverInvoice(Wizard):
         if Transaction().context.get('company'):
             company = Company(Transaction().context['company'])
         else:
-            message = u'No hay companía:'
+            message = 'No hay companía:'
             self.factura.message = message
             return 'factura'
 
@@ -104,7 +104,7 @@ class RecoverInvoice(Wizard):
                 WSDL = (
                     'https://servicios1.afip.gov.ar/wsfexv1/service.asmx?WSDL')
         else:
-            message = u'WS no soportado: ' + repr(service)
+            message = 'WS no soportado: ' + repr(service)
             self.factura.message = message
             return 'factura'
 
@@ -118,8 +118,8 @@ class RecoverInvoice(Wizard):
         try:
             auth_data = company.pyafipws_authenticate(
                 service=service, cache=cache)
-        except Exception, e:
-            message = u'Service no soportado:' + repr(e)
+        except Exception as e:
+            message = 'Service no soportado:' + repr(e)
             self.factura.message = message
             return 'factura'
 
@@ -192,7 +192,7 @@ class RecoverInvoice(Wizard):
 
         # store the results
         invoice_date = self.factura.FechaCbte or None
-        if not '-' in invoice_date:
+        if '-' not in invoice_date:
             fe = invoice_date
             invoice_date = '-'.join([fe[:4], fe[4:6], fe[6:8]])
         invoice.invoice_date = invoice_date
@@ -203,7 +203,7 @@ class RecoverInvoice(Wizard):
         invoice.pyafipws_cae = self.factura.CAE
 
         cae_due_date = self.factura.Vencimiento or None
-        if not '-' in cae_due_date:
+        if '-' not in cae_due_date:
             fe = cae_due_date
             cae_due_date = '-'.join([fe[:4], fe[4:6], fe[6:8]])
         invoice.pyafipws_cae_due_date = cae_due_date

@@ -3,14 +3,14 @@
 # the full copyright notices and license terms.
 
 from trytond.pool import Pool
-from .invoice import *
+from . import invoice
 
 
 def register():
     Pool.register(
-        RecoverInvoiceStart,
-        RecoverInvoiceFactura,
+        invoice.RecoverInvoiceStart,
+        invoice.RecoverInvoiceFactura,
         module='recover_invoice_ar', type_='model')
     Pool.register(
-        RecoverInvoice,
+        invoice.RecoverInvoice,
         module='recover_invoice_ar', type_='wizard')
