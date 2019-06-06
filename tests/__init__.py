@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 
 try:
-    from trytond.modules.recover_invoice_ar.tests.tests import suite
+    from trytond.modules.recover_invoice_ar.tests.test_recover_invoice_ar import suite
 except ImportError:
-    from .tests import suite
+    from .test_recover_invoice_ar import suite
 
 __all__ = ['suite']
