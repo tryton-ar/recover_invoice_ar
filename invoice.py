@@ -175,9 +175,23 @@ class RecoverInvoice(Wizard):
         return 'factura'
 
     def default_factura(self, fields):
-        res = {
-            'message': self.factura.message,
-            }
+        res = {}
+        if hasattr(self.factura, 'message'):
+            res['message'] = self.factura.message
+        if hasattr(self.factura, 'CbteNro'):
+            res['CbteNro'] = self.factura.CbteNro
+        if hasattr(self.factura, 'CAE'):
+            res['CAE'] = self.factura.CAE
+        if hasattr(self.factura, 'FechaCbte'):
+            res['FechaCbte'] = self.factura.FechaCbte
+        if hasattr(self.factura, 'ImpTotal'):
+            res['ImpTotal'] = self.factura.ImpTotal
+        if hasattr(self.factura, 'cuit_cliente'):
+            res['cuit_cliente'] = self.factura.cuit_cliente
+        if hasattr(self.factura, 'Vencimiento'):
+            res['Vencimiento'] = self.factura.Vencimiento
+        if hasattr(self.factura, 'Cuit'):
+            res['Cuit'] = self.factura.Cuit
         return res
 
     def transition_save_invoice(self):
@@ -189,6 +203,8 @@ class RecoverInvoice(Wizard):
             return 'start'
 
         invoice = Invoice(self.factura.invoice.id)
+        invoice.pos = self.start.pos
+        invoice.invoice_type = self.start.invoice_type
 
         # store the results
         invoice_date = self.factura.FechaCbte or None
@@ -219,5 +235,6 @@ class RecoverInvoice(Wizard):
         invoice.pyafipws_barcode = bars
 
         Invoice.save([invoice])
+        Invoice.validate_invoice([invoice])
         Invoice.post([invoice])
         return 'end'
