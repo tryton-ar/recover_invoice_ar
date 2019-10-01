@@ -209,8 +209,8 @@ class RecoverInvoice(Wizard):
         punto_vta = self.start.pos.number
         cae_due = ''.join([c for c in str(self.factura.Vencimiento or '')
                 if c.isdigit()])
-        bars = ''.join([str(self.factura.Cuit), '%02d' % int(tipo_cbte),
-                '%04d' % int(punto_vta), str(self.factura.CAE), cae_due])
+        bars = ''.join([str(self.factura.Cuit), '%03d' % int(tipo_cbte),
+                '%05d' % int(punto_vta), str(self.factura.CAE), cae_due])
         bars = bars + invoice.pyafipws_verification_digit_modulo10(bars)
         invoice.pyafipws_barcode = bars
 
