@@ -197,7 +197,7 @@ class RecoverInvoice(Wizard):
             invoice_date = '-'.join([fe[:4], fe[4:6], fe[6:8]])
         invoice.invoice_date = invoice_date
 
-        invoice.number = '%04d-%08d' % (self.start.pos.number,
+        invoice.number = '%05d-%08d' % (self.start.pos.number,
             int(self.factura.CbteNro))
 
         invoice.pyafipws_cae = self.factura.CAE
