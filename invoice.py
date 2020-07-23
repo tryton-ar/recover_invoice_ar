@@ -129,7 +129,7 @@ class RecoverInvoice(Wizard):
         ws.Sign = auth_data['sign']
 
         # connect to the webservice and call to the test method
-        ws.Conectar(wsdl=WSDL, cache=cache)
+        ws.Conectar(wsdl=WSDL, cache=cache, cacert=True)
 
         if self.start.cbte_nro is None:
             if service == 'wsfe' or service == 'wsmtxca':
