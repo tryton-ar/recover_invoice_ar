@@ -31,11 +31,13 @@ Install account_invoice::
 Create company::
 
     >>> currency = get_currency('ARS')
+    >>> currency.afip_code = 'PES'
+    >>> currency.save()
     >>> _ = create_company(currency=currency)
     >>> company = get_company()
     >>> tax_identifier = company.party.identifiers.new()
     >>> tax_identifier.type = 'ar_cuit'
-    >>> tax_identifier.code = '20267565393' # reingart CUIT
+    >>> tax_identifier.code = '30710158254' # gcoop CUIT
     >>> company.party.iva_condition = 'responsable_inscripto'
     >>> company.party.save()
 
@@ -75,7 +77,8 @@ Create tax IVA 21%::
 
     >>> TaxCode = Model.get('account.tax.code')
     >>> tax = create_tax(Decimal('.21'))
-    >>> tax.group = tax_groups['iva']
+    >>> tax.group = tax_groups['gravado']
+    >>> tax.iva_code = '5'
     >>> tax.save()
     >>> invoice_base_code = create_tax_code(tax, 'base', 'invoice')
     >>> invoice_base_code.save()
@@ -118,7 +121,7 @@ Create party::
     >>> Party = Model.get('party.party')
     >>> party = Party(name='Party')
     >>> party.iva_condition='responsable_inscripto'
-    >>> party.vat_number='33333333339'
+    >>> party.vat_number='30688555872'
     >>> party.save()
 
 Create party consumidor final::
@@ -193,6 +196,10 @@ Get CompUltimoAutorizado and configure sequences::
     >>> invoice_types['6'].invoice_sequence.number_next = cbte_nro + 1
     >>> invoice_types['6'].invoice_sequence.save()
 
+    >>> cbte_nro = int(wsfev1.CompUltimoAutorizado('11', pos.number))
+    >>> invoice_types['11'].invoice_sequence.number_next = cbte_nro + 1
+    >>> invoice_types['11'].invoice_sequence.save()
+
 Create invoice::
 
     >>> Invoice = Model.get('account.invoice')
@@ -223,10 +230,6 @@ Create invoice::
     >>> invoice.save()
     >>> invoice.pyafipws_concept = '1'
     >>> invoice.click('post')
-    >>> invoice.state
-    'posted'
-    >>> invoice.tax_identifier.code
-    '20267565393'
 
 Duplicate and test recover last invoice::
 
