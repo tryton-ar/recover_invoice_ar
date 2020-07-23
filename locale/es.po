@@ -52,7 +52,7 @@ msgstr "Mensaje"
 
 msgctxt "field:recover.invoice.start,cbte_nro:"
 msgid "Número comprobante"
-msgstr ""
+msgstr "Número comprobante"
 
 msgctxt "field:recover.invoice.start,id:"
 msgid "ID"
@@ -80,11 +80,11 @@ msgstr "Recuperar factura"
 
 msgctxt "view:recover.invoice.factura:"
 msgid "Factura Obtenida"
-msgstr ""
+msgstr "Factura obtenida"
 
 msgctxt "view:recover.invoice.factura:"
 msgid "Factura a recuperar"
-msgstr ""
+msgstr "Factura a recuperar"
 
 msgctxt "wizard_button:recover.invoice,factura,end:"
 msgid "Close"
