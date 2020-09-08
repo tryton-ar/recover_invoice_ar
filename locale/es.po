@@ -38,10 +38,6 @@ msgctxt "field:recover.invoice.factura,cuit_cliente:"
 msgid "CUIT del CLIENTE"
 msgstr ""
 
-msgctxt "field:recover.invoice.factura,id:"
-msgid "ID"
-msgstr "ID"
-
 msgctxt "field:recover.invoice.factura,invoice:"
 msgid "Invoice"
 msgstr "Factura"
@@ -53,10 +49,6 @@ msgstr "Mensaje"
 msgctxt "field:recover.invoice.start,cbte_nro:"
 msgid "Número comprobante"
 msgstr "Número comprobante"
-
-msgctxt "field:recover.invoice.start,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:recover.invoice.start,invoice_type:"
 msgid "Invoice Type"
