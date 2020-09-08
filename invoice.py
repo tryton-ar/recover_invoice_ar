@@ -8,6 +8,8 @@ from trytond.model import fields, ModelView
 from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.modules.account_invoice_ar.afip_auth import \
+    get_cache_dir as get_account_invoice_ar_cache_dir
 
 
 class RecoverInvoiceStart(ModelView):
@@ -105,9 +107,6 @@ class RecoverInvoice(Wizard):
             message = 'WS no soportado: ' + repr(service)
             self.factura.message = message
             return 'factura'
-
-        from trytond.modules.account_invoice_ar.afip_auth import \
-            get_cache_dir as get_account_invoice_ar_cache_dir
 
         ws.LanzarExcepciones = True
         cache = get_account_invoice_ar_cache_dir()
