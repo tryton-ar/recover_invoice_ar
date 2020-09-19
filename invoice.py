@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # This file is part of the recover_invoice_ar module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
@@ -8,8 +7,6 @@ from trytond.model import fields, ModelView
 from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.modules.account_invoice_ar.afip_auth import \
-    get_cache_dir as get_account_invoice_ar_cache_dir
 
 
 class RecoverInvoiceStart(ModelView):
@@ -109,23 +106,19 @@ class RecoverInvoice(Wizard):
             return 'factura'
 
         ws.LanzarExcepciones = True
-        cache = get_account_invoice_ar_cache_dir()
+        cache = company.get_cache_dir()
 
         # authenticate against AFIP:
         try:
-            auth_data = company.pyafipws_authenticate(
-                service=service, cache=cache)
+            ta = company.pyafipws_authenticate(service=service, cache=cache)
         except Exception as e:
             message = 'Service no soportado:' + repr(e)
             self.factura.message = message
             return 'factura'
 
         # set AFIP webservice credentials:
+        ws.SetTicketAcceso(ta)
         ws.Cuit = company.party.vat_number
-        ws.Token = auth_data['token']
-        ws.Sign = auth_data['sign']
-
-        # connect to the webservice and call to the test method
         ws.Conectar(wsdl=WSDL, cache=cache, cacert=True)
 
         if self.start.cbte_nro is None:
