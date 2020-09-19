@@ -1,8 +1,8 @@
 before_script:
-  - apt update -yqq
-  - apt install swig -yqq
-  - apt install libssl-dev -yqq
-  - apt install python3-dev -yqq
+  - apt-get update -yqq
+  - apt-get install swig -yqq
+  - apt-get install libssl-dev -yqq
+  - apt-get install python3-dev -yqq
   - sed -i 's#ssh://git@gitlab.com#https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com#g' setup.py
 
 stages:
