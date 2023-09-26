@@ -15,7 +15,7 @@ class RecoverInvoiceStart(ModelView):
 
     pos = fields.Many2One('account.pos', 'Point of Sale', required=True)
     invoice_type = fields.Many2One('account.pos.sequence', 'Invoice Type',
-        domain=[('pos', '=', Eval('pos'))], depends=['pos'], required=True)
+        domain=[('pos', '=', Eval('pos'))], required=True)
     cbte_nro = fields.Integer('Número comprobante')
 
 
