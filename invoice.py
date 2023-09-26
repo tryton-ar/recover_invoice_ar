@@ -1,6 +1,7 @@
 # This file is part of the recover_invoice_ar module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
+from datetime import datetime
 
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.model import fields, ModelView
@@ -201,7 +202,8 @@ class RecoverInvoice(Wizard):
         if '-' not in invoice_date:
             fe = invoice_date
             invoice_date = '-'.join([fe[:4], fe[4:6], fe[6:8]])
-        invoice.invoice_date = invoice_date
+        invoice.invoice_date = datetime.strptime(
+            invoice_date, "%Y-%m-%d").date()
 
         invoice.number = '%05d-%08d' % (self.start.pos.number,
             int(self.factura.CbteNro))
@@ -212,7 +214,8 @@ class RecoverInvoice(Wizard):
         if '-' not in cae_due_date:
             fe = cae_due_date
             cae_due_date = '-'.join([fe[:4], fe[4:6], fe[6:8]])
-        invoice.pyafipws_cae_due_date = cae_due_date
+        invoice.pyafipws_cae_due_date = datetime.strptime(
+            cae_due_date, "%Y-%m-%d").date()
 
         # calculate the barcode:
         tipo_cbte = self.start.invoice_type.invoice_type
