@@ -3,8 +3,10 @@
 # the full copyright notices and license terms.
 
 from trytond.pool import Pool
+
 from . import invoice
 
+__all__ = ['register']
 
 def register():
     Pool.register(
