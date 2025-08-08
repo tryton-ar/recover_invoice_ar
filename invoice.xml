@@ -2,31 +2,5 @@
 <tryton>
     <data>
 
-<!-- Wizard Recover Invoice -->
-
-        <record model="ir.ui.view" id="recover_invoice_start_view">
-            <field name="model">recover.invoice.start</field>
-            <field name="type">form</field>
-            <field name="name">recover_invoice_start_view</field>
-        </record>
-
-        <record model="ir.ui.view" id="recover_invoice_factura_view">
-            <field name="model">recover.invoice.factura</field>
-            <field name="type">form</field>
-            <field name="name">recover_invoice_factura_view</field>
-        </record>
-
-        <record model="ir.action.wizard" id="wizard_recover_invoice">
-            <field name="name">Recover Invoice</field>
-            <field name="wiz_name">recover.invoice</field>
-            <field name="model">account.invoice</field>
-        </record>
-
-        <record model="ir.action.keyword" id="wizard_recover_invoice_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">account.invoice,-1</field>
-            <field name="action" ref="wizard_recover_invoice"/>
-        </record>
-
     </data>
 </tryton>
